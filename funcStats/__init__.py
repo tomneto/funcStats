@@ -1,7 +1,7 @@
 import inspect
 from datetime import datetime
 
-from funcStats.log import log
+from .log import log
 
 def info():
     return None
@@ -45,11 +45,6 @@ class monitor:
 
             except TypeError:
                 raise Exception("Impossible to monitor. Not a function or method provided.")
-
-
-    def start(self):
-        self.thread.start()
-        self.thread.join()
 
     def getInfo(self):
         # Get the function's name

@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 from pathlib import Path
 this_directory = Path(__file__).parent
 
-VERSION = '0.0.6'
+VERSION = '0.0.8'
 DESCRIPTION = 'A module that helps to evaluate functions when some tests are needed'
 LONG_DESCRIPTION = str(open('/Volumes/Projetos/Git/funcStats/README.MD', 'r').read())
 
@@ -17,7 +17,7 @@ setup(
     long_description_content_type="text/markdown",
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
-    install_requires=['datetime', 'inspect'],
+    install_requires=['datetime'],
     keywords=['python', 'functions', 'cronometer', 'crono', 'meter', 'evaluate functions'],
     classifiers=[
         "Development Status :: 1 - Planning",

@@ -1,2 +1,0 @@
-from funcStats import meter
-
