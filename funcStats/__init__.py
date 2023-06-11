@@ -1,14 +1,10 @@
 import inspect
-import os
 from datetime import datetime
-from threading import Thread
 
 from funcStats.log import log
 
-
 def info():
-    type = None
-    signature = None
+    return None
 
 
 class monitor:
