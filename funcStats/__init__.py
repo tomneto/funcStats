@@ -108,7 +108,10 @@ class monitor:
                 self.logStream.add(f"Meter Execution Args: {argPack}")
 
                 try:
-                    executionResult = str(self.func(*argPack))
+                    if not isinstance(argPack, str):
+                        executionResult = str(self.func(*argPack))
+                    else:
+                        executionResult = str(self.func(argPack))
                 except Exception as e:
                     executionResult = e
 

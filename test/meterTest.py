@@ -33,5 +33,5 @@ multipleTestsArgs = [
 #toFileMonitor.meter(multipleTestsArgs)
 
 
-singleTestsArgs = [('a', 'b', 'c')]  # this time we will add a single set of tuple as the args for our target function
+singleTestsArgs = [('abc', 'cba', 'dca')]  # this time we will add a single set of tuple as the args for our target function
 myMonitor.meter(singleTestsArgs, loops=10)
