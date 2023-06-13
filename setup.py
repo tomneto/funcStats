@@ -6,7 +6,7 @@ this_directory = Path(__file__).parent
 
 VERSION = '0.0.9'
 DESCRIPTION = 'A module that helps to evaluate functions when some tests are needed'
-LONG_DESCRIPTION = str(open('/Volumes/Projetos/Git/funcStats/README.MD', 'r').read())
+LONG_DESCRIPTION = str(open('./README.MD', 'r').read())
 
 setup(
     name="funcStats",
