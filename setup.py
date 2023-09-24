@@ -2,11 +2,11 @@ import os.path
 
 from setuptools import setup, find_packages
 from pathlib import Path
+from config import LONG_DESCRIPTION
 this_directory = Path(__file__).parent
 
-VERSION = '0.0.9'
+VERSION = '0.1.11'
 DESCRIPTION = 'A module that helps to evaluate functions when some tests are needed'
-LONG_DESCRIPTION = str(open('./README.MD', 'r').read())
 
 setup(
     name="funcStats",

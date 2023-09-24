@@ -21,9 +21,6 @@ class monitor:
         self.target = info
         self.loopCount = 1
 
-        # more complex stuff
-        #self.thread = Thread(target=target, args=args)
-
         if self.func is None:
             raise Exception("Monitor needs a method to watch, please use the 'target' argument or the first positional "
                             "argument to set it.")
@@ -47,35 +44,26 @@ class monitor:
                 raise Exception("Impossible to monitor. Not a function or method provided.")
 
     def getInfo(self):
-        # Get the function's name
         self.targetName = self.func.__name__
 
-        # Get the function's arguments
         self.target.signature = inspect.signature(self.func)
         self.targetArgs = list(self.target.signature.parameters.keys())
 
-        # Get the function's docstring
         self.target.as_string = self.func.__doc__
 
-        # Check if the function is a method
         self.target.is_method = inspect.ismethod(self.func)
 
-        # Check if the function is a generator
         self.target.is_generator = inspect.isgeneratorfunction(self.func)
 
-        # Get the function's source code
         self.target.source_code = inspect.getsource(self.func)
 
-        # Get the file name and line number where the function is defined
         self.target.source_location = inspect.getsourcelines(self.func)
 
         self.targetFilename = self.target.source_location[0]
         self.targetLineNumber = self.target.source_location[1]
 
-        # Get the function's module name
         self.targetModule = inspect.getmodule(self.func).__name__
 
-        # Create a dictionary to store the information
         targetInfo = {
             "name": self.targetName,
             "arguments": self.targetArgs,
@@ -86,45 +74,57 @@ class monitor:
 
         return targetInfo
 
-    def meter(self, args: list, loops: int = 1):
+    def meter(self, args: list = None, loops: int = 1):
         self.logStream.skipLine()
 
         self.logStream.add(f'Meter: Loading args... {args}')
 
         self.count = 0
 
-        for argPack in args:
+        if args is not None:
+            for argPack in args:
+                result = self.run(argPack, loops)
+        else:
+            result = self.run(None, loops)
 
-            for i in range(loops):
+        return result
 
-                self.count += 1
-                self.loopCount += 1
 
-                startTime = datetime.now()
+    def run(self, argPack, loops):
+        for i in range(loops):
 
-                self.logStream.skipLine()
-                self.logStream.add(f'Meter Execution Count: {self.count}')
-                self.logStream.add(f"Meter Execution Starts at: {startTime}")
-                self.logStream.add(f"Meter Execution Args: {argPack}")
+            self.count += 1
+            self.loopCount += 1
 
-                try:
-                    if not isinstance(argPack, str):
-                        executionResult = str(self.func(*argPack))
-                    else:
-                        executionResult = str(self.func(argPack))
-                except Exception as e:
-                    executionResult = e
+            startTime = datetime.now()
 
-                self.logStream.add(f"Meter Execution Returns: {str(executionResult)}...")
+            self.logStream.skipLine()
+            self.logStream.add(f'Meter Execution Count: {self.count}')
+            self.logStream.add(f"Meter Execution Starts at: {startTime}")
+            self.logStream.add(f"Meter Execution Args: {argPack}")
 
-                endTime = datetime.now()
+            try:
+                if argPack is None:
+                    executionResult = str(self.func())
+                elif not isinstance(argPack, str):
+                    executionResult = str(self.func(*argPack))
+                elif isinstance(argPack, str):
+                    executionResult = str(self.func(argPack))
+            except Exception as e:
+                executionResult = e
 
-                duration = endTime - startTime
+            self.logStream.add(f"Meter Execution Returns: {str(executionResult)}...")
 
-                hours = duration.seconds // 3600
-                minutes = (duration.seconds % 3600) // 60
-                seconds = duration.seconds % 60
-                milliseconds = duration.microseconds // 1000
+            endTime = datetime.now()
 
-                self.logStream.add(f"Meter Execution Takes: {hours}h {minutes}m {seconds}s {milliseconds}ms")
-                self.logStream.skipLine()
+            duration = endTime - startTime
+
+            hours = duration.seconds // 3600
+            minutes = (duration.seconds % 3600) // 60
+            seconds = duration.seconds % 60
+            milliseconds = duration.microseconds // 1000
+
+            self.logStream.add(f"Meter Execution Takes: {hours}h {minutes}m {seconds}s {milliseconds}ms")
+            self.logStream.skipLine()
+
+            return executionResult
